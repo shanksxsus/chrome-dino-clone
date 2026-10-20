@@ -128,6 +128,11 @@
         ARCADE_MODE_TOP_POSITION_PERCENT: 0.1
     };
 
+    // Optional replacement for the T-Rex sprite. Add a transparent PNG at
+    // this path to use a custom character; the original sprite is the
+    // fallback so the game remains playable before the asset is supplied.
+    Runner.config.CUSTOM_CHARACTER_SRC = 'assets/custom-character.png';
+
 
     /**
      * Default dimensions.
@@ -1527,6 +1532,8 @@
     function Trex(canvas, spritePos) {
         this.canvas = canvas;
         this.canvasCtx = canvas.getContext('2d');
+        this.customCharacter = new Image();
+        this.customCharacter.src = Runner.config.CUSTOM_CHARACTER_SRC;
         this.spritePos = spritePos;
         this.xPos = 0;
         this.yPos = 0;
@@ -1735,6 +1742,16 @@
             // Adjustments for sprite sheet position.
             sourceX += this.spritePos.x;
             sourceY += this.spritePos.y;
+
+            // A supplied custom character replaces the T-Rex artwork while
+            // retaining the original dimensions and collision behavior.
+            if (this.customCharacter.complete && this.customCharacter.naturalWidth) {
+                var targetWidth = this.ducking && this.status != Trex.status.CRASHED ?
+                    this.config.WIDTH_DUCK : this.config.WIDTH;
+                this.canvasCtx.drawImage(this.customCharacter,
+                    this.xPos, this.yPos, targetWidth, this.config.HEIGHT);
+                return;
+            }
 
             // Ducking.
             if (this.ducking && this.status != Trex.status.CRASHED) {

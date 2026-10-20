@@ -1,4 +1,36 @@
-## t-rex-runner
+# Chrome Runner — Custom Character Edition
+
+An offline, browser-playable clone of Chrome's endless runner. The gameplay
+and original artwork are based on [wayou/t-rex-runner], which extracts the
+open-source runner from Chromium.
+
+The game works with no build step or dependencies:
+
+```bash
+python3 -m http.server 8080
+```
+
+Then open <http://localhost:8080>.
+
+Press Space or ↑ to start and jump. Hold ↓ to duck. After a crash, press
+Space, ↑, or tap the game to restart.
+
+## Replace the character
+
+See [CUSTOM_CHARACTER.md](CUSTOM_CHARACTER.md). Add your transparent image as
+`assets/custom-character.png`; the original T-Rex remains the fallback until
+that file exists.
+
+## Attribution
+
+The base game is distributed under the BSD-style license in [LICENSE](LICENSE)
+and retains the original Chromium copyright notices.
+
+[wayou/t-rex-runner]: https://github.com/wayou/t-rex-runner
+
+---
+
+## Original project notes
 
 the trex runner game extracted from chrome offline err page.
 

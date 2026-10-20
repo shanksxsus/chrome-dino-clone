@@ -4,16 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
-    <title >chrome easter egg: t-rex runner</title>
+    <title>Chrome Runner — Custom Character Edition</title>
     <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
     <script src="index.js"></script>
 </head>
 
 <body id="t" class="offline">
-    <div id="messageBox" class="sendmessage">
-         <h1 style="text-align: center;font-family: 'Open Sans', sans-serif;">Press Space to start</h1>
-         <div class="niokbutton" onclick="okbuttonsend()"></div>
+    <div id="messageBox" class="start-screen" role="dialog" aria-label="Start game">
+         <p class="start-screen__eyebrow">OFFLINE RUNNER</p>
+         <h1>Press Space to start</h1>
+         <p>Jump with Space or ↑ · Duck with ↓</p>
     </div>
     <div id="main-frame-error" class="interstitial-wrapper">
         <div id="main-content">
@@ -32,13 +32,11 @@
 </body>
 
 <script>
-    document.onkeydown = function(evt) {
-    evt = evt || window.event;
-    if (evt.keyCode == 32) {
-        var box = document.getElementById("messageBox");
-        box.style.visibility="hidden";
-    }
-};
+    document.addEventListener('keydown', function (evt) {
+        if (evt.code === 'Space' || evt.key === 'ArrowUp') {
+            document.getElementById('messageBox').classList.add('start-screen--hidden');
+        }
+    });
 </script>
     
 </html>
