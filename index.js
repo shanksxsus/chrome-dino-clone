@@ -687,6 +687,7 @@
                     e.type == Runner.events.TOUCHSTART)) {
                     if (!this.playing) {
                         this.loadSounds();
+                        this.startBackgroundMusic();
                         this.playing = true;
                         this.update();
                         if (window.errorPageController) {
@@ -904,11 +905,34 @@
             }
         },
 
+        /** Start the uploaded background track after the user's first input. */
+        startBackgroundMusic: function () {
+            var music = document.getElementById('background-music');
+            if (!music) {
+                return;
+            }
+
+            music.volume = 0.25;
+            var playback = music.play();
+            if (playback) {
+                playback.catch(function () {});
+            }
+        },
+
         /**
-         * Play a short, arcade-style two-note jump vocal.
-         * This is synthesized locally and does not use a recording.
+         * Play the uploaded jump vocal, with a synthesized fallback.
          */
         playHeeHee: function () {
+            var jumpSound = document.getElementById('jump-sound');
+            if (jumpSound) {
+                jumpSound.currentTime = 0;
+                var playback = jumpSound.play();
+                if (playback) {
+                    playback.catch(function () {});
+                }
+                return;
+            }
+
             if (!this.audioContext) {
                 return;
             }
