@@ -696,6 +696,7 @@
                     //  Play sound effect and jump on starting the game for the first time.
                     if (!this.tRex.jumping && !this.tRex.ducking) {
                         this.playSound(this.soundFx.BUTTON_PRESS);
+                        this.playHeeHee();
                         this.tRex.startJump(this.currentSpeed);
                     }
                 }
@@ -901,6 +902,44 @@
                 sourceNode.connect(this.audioContext.destination);
                 sourceNode.start(0);
             }
+        },
+
+        /**
+         * Play a short, arcade-style two-note jump vocal.
+         * This is synthesized locally and does not use a recording.
+         */
+        playHeeHee: function () {
+            if (!this.audioContext) {
+                return;
+            }
+
+            var context = this.audioContext;
+            var now = context.currentTime;
+            var notes = [
+                { offset: 0, frequency: 620, duration: 0.09 },
+                { offset: 0.11, frequency: 760, duration: 0.12 }
+            ];
+
+            if (context.state === 'suspended') {
+                context.resume();
+            }
+
+            notes.forEach(function (note) {
+                var oscillator = context.createOscillator();
+                var gain = context.createGain();
+                var start = now + note.offset;
+                var end = start + note.duration;
+
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(note.frequency, start);
+                gain.gain.setValueAtTime(0.0001, start);
+                gain.gain.exponentialRampToValueAtTime(0.08, start + 0.012);
+                gain.gain.exponentialRampToValueAtTime(0.0001, end);
+                oscillator.connect(gain);
+                gain.connect(context.destination);
+                oscillator.start(start);
+                oscillator.stop(end + 0.01);
+            });
         },
 
         /**
