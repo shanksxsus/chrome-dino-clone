@@ -1171,6 +1171,20 @@
             var tRexCollisionBoxes = tRex.ducking ?
                 Trex.collisionBoxes.DUCKING : Trex.collisionBoxes.RUNNING;
 
+            if (tRex.customCharacter && tRex.customCharacter.complete &&
+                tRex.customCharacter.naturalWidth) {
+                var collisionScale = Trex.CUSTOM_COLLISION_SCALE;
+                tRexCollisionBoxes = tRexCollisionBoxes.map(function (box) {
+                    var widthReduction = box.width * (1 - collisionScale) / 2;
+                    var heightReduction = box.height * (1 - collisionScale) / 2;
+                    return new CollisionBox(
+                        box.x + widthReduction,
+                        box.y + heightReduction,
+                        box.width * collisionScale,
+                        box.height * collisionScale);
+                });
+            }
+
             // Detailed axis aligned box check.
             for (var t = 0; t < tRexCollisionBoxes.length; t++) {
                 for (var i = 0; i < collisionBoxes.length; i++) {
@@ -1600,6 +1614,11 @@
             new CollisionBox(9, 34, 15, 4)
         ]
     };
+
+    // The uploaded character has transparent padding and a smaller visible
+    // silhouette than the original T-Rex. Keep gameplay forgiving by using a
+    // reduced collision box only when the custom character is active.
+    Trex.CUSTOM_COLLISION_SCALE = 0.65;
 
 
     /**
